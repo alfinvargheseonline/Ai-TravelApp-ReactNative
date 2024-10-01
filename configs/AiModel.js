@@ -1,0 +1,50 @@
+const {
+    GoogleGenerativeAI,
+    HarmCategory,
+    HarmBlockThreshold,
+  } = require("@google/generative-ai");
+  
+  const apiKey = process.env.EXPO_PUBLIC_GOOGLE_GEMINI_API_KEY;
+  const genAI = new GoogleGenerativeAI(apiKey);
+  
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
+  });
+  
+  const generationConfig = {
+    temperature: 1,
+    topP: 0.95,
+    topK: 64,
+    maxOutputTokens: 8192,
+    responseMimeType: "application/json",
+  };
+  
+  export const chatSession = model.startChat({
+    generationConfig,
+    // safetySettings: Adjust safety settings
+    // See https://ai.google.dev/gemini-api/docs/safety-settings
+    history: [
+      {
+        role: "user",
+        parts: [
+          {
+            text: "Generate Travel Plan for Location: New York, NY, USA, for 4Days and 3 Night for Just me with a Cheap budget with a Flight details, Flight Price with Booking url, Hotels options list with HotelName, Hotel address, Price, hotel image url, geo coordinates, rating, descriptions and Places to visit nearby with placeName, Place Details, Place Image Url, Geo Coordinates, ticket Pricing, Time t travel each of the {location} for 4 days and 3 night with each day plan with best time to visit in JSON format",
+          },
+        ],
+      },
+      {
+        role: "model",
+        parts: [
+          {
+            text: '```json\n{\n  "flight": {\n    "details": {\n      "airline": "Spirit Airlines",\n      "departure_city": "Your Departure City",\n      "arrival_city": "New York, NY",\n      "departure_date": "2024-03-15",\n      "arrival_date": "2024-03-15",\n      "departure_time": "10:00 AM",\n      "arrival_time": "1:00 PM" \n    },\n    "price": "$150",\n    "booking_url": "https://www.spirit.com/" \n  },\n  "hotel": [\n    {\n      "name": "The Jane Hotel",\n      "address": "113 Jane St, New York, NY 10014",\n      "price": "$100/night",\n      "image_url": "https://images.trvl-media.com/hotels/4000000/3980000/3979500/3979463/3979463_1280_960.jpg",\n      "geo_coordinates": {\n        "latitude": 40.7364,\n        "longitude": -74.0092\n      },\n      "rating": 4.0,\n      "description": "A historic, budget-friendly hotel in the West Village with shared bathrooms and a unique atmosphere.",\n      "places_nearby": [\n        {\n          "name": "Washington Square Park",\n          "details": "A famous park with a large arch and a lively atmosphere.",\n          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Washington_Square_Park_NYC.jpg/1200px-Washington_Square_Park_NYC.jpg",\n          "geo_coordinates": {\n            "latitude": 40.7306,\n            "longitude": -73.9963\n          },\n          "ticket_pricing": "Free",\n          "time_to_travel": "15 minutes walk"\n        },\n        {\n          "name": "The Village Voice",\n          "details": "A legendary alternative newspaper.",\n          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Village_Voice_logo.svg/1200px-Village_Voice_logo.svg.png",\n          "geo_coordinates": {\n            "latitude": 40.7283,\n            "longitude": -74.0023\n          },\n          "ticket_pricing": "N/A",\n          "time_to_travel": "5 minutes walk"\n        }\n      ]\n    },\n    {\n      "name": "The Pod 51",\n      "address": "230 E 51st St, New York, NY 10022",\n      "price": "$120/night",\n      "image_url": "https://www.thepodhotel.com/wp-content/uploads/2017/11/pod51-lobby.jpg",\n      "geo_coordinates": {\n        "latitude": 40.7572,\n        "longitude": -73.9684\n      },\n      "rating": 4.5,\n      "description": "A modern, capsule hotel in Midtown East with compact rooms and a cool vibe.",\n      "places_nearby": [\n        {\n          "name": "Grand Central Terminal",\n          "details": "A historic train station with stunning architecture.",\n          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Grand_Central_Terminal_2013_IMG_0014.jpg/1200px-Grand_Central_Terminal_2013_IMG_0014.jpg",\n          "geo_coordinates": {\n            "latitude": 40.7527,\n            "longitude": -73.9772\n          },\n          "ticket_pricing": "Free",\n          "time_to_travel": "5 minutes walk"\n        },\n        {\n          "name": "Chrysler Building",\n          "details": "An iconic Art Deco skyscraper.",\n          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Chrysler_Building_%282017%29.jpg/1200px-Chrysler_Building_%282017%29.jpg",\n          "geo_coordinates": {\n            "latitude": 40.7507,\n            "longitude": -73.9759\n          },\n          "ticket_pricing": "N/A",\n          "time_to_travel": "10 minutes walk"\n        }\n      ]\n    }\n  ],\n  "daily_plan": [\n    {\n      "day": 1,\n      "schedule": [\n        {\n          "time": "10:00 AM",\n          "activity": "Arrive at JFK Airport and take the subway to your hotel in the West Village.",\n          "location": "JFK Airport, New York, NY"\n        },\n        {\n          "time": "11:30 AM",\n          "activity": "Check in to your hotel and leave your luggage.",\n          "location": "Your hotel"\n        },\n        {\n          "time": "12:00 PM",\n          "activity": "Lunch at a local cafe in the West Village.",\n          "location": "West Village, New York, NY"\n        },\n        {\n          "time": "1:00 PM",\n          "activity": "Walk through Washington Square Park.",\n          "location": "Washington Square Park"\n        },\n        {\n          "time": "2:30 PM",\n          "activity": "Visit the 9/11 Memorial & Museum.",\n          "location": "9/11 Memorial & Museum"\n        },\n        {\n          "time": "5:30 PM",\n          "activity": "Dinner in the Financial District.",\n          "location": "Financial District, New York, NY"\n        },\n        {\n          "time": "7:00 PM",\n          "activity": "Walk across the Brooklyn Bridge.",\n          "location": "Brooklyn Bridge"\n        },\n        {\n          "time": "8:30 PM",\n          "activity": "Explore DUMBO and enjoy the views.",\n          "location": "DUMBO, Brooklyn, NY"\n        }\n      ]\n    },\n    {\n      "day": 2,\n      "schedule": [\n        {\n          "time": "9:00 AM",\n          "activity": "Start your day with a stroll through Central Park.",\n          "location": "Central Park"\n        },\n        {\n          "time": "10:30 AM",\n          "activity": "Visit the Metropolitan Museum of Art (free admission after 5 pm).",\n          "location": "Metropolitan Museum of Art"\n        },\n        {\n          "time": "1:00 PM",\n          "activity": "Lunch in the Upper East Side.",\n          "location": "Upper East Side, New York, NY"\n        },\n        {\n          "time": "2:00 PM",\n          "activity": "Explore the Museum of Modern Art (MoMA).",\n          "location": "Museum of Modern Art (MoMA)"\n        },\n        {\n          "time": "5:00 PM",\n          "activity": "Enjoy a happy hour in Midtown.",\n          "location": "Midtown, New York, NY"\n        },\n        {\n          "time": "7:00 PM",\n          "activity": "Dinner in Times Square.",\n          "location": "Times Square, New York, NY"\n        },\n        {\n          "time": "8:00 PM",\n          "activity": "Catch a Broadway show.",\n          "location": "Broadway, New York, NY"\n        }\n      ]\n    },\n    {\n      "day": 3,\n      "schedule": [\n        {\n          "time": "9:00 AM",\n          "activity": "Visit the Statue of Liberty and Ellis Island.",\n          "location": "Statue of Liberty and Ellis Island"\n        },\n        {\n          "time": "12:00 PM",\n          "activity": "Lunch in Battery Park.",\n          "location": "Battery Park, New York, NY"\n        },\n        {\n          "time": "1:00 PM",\n          "activity": "Explore the Financial District.",\n          "location": "Financial District, New York, NY"\n        },\n        {\n          "time": "3:00 PM",\n          "activity": "Walk across the Brooklyn Bridge (again for a different perspective).",\n          "location": "Brooklyn Bridge"\n        },\n        {\n          "time": "4:30 PM",\n          "activity": "Enjoy a drink with a view at the rooftop bar at The Jane Hotel.",\n          "location": "The Jane Hotel"\n        },\n        {\n          "time": "7:00 PM",\n          "activity": "Dinner in Greenwich Village.",\n          "location": "Greenwich Village, New York, NY"\n        },\n        {\n          "time": "8:30 PM",\n          "activity": "Enjoy live music at a local bar in the West Village.",\n          "location": "West Village, New York, NY"\n        }\n      ]\n    },\n    {\n      "day": 4,\n      "schedule": [\n        {\n          "time": "9:00 AM",\n          "activity": "Check out of your hotel.",\n          "location": "Your hotel"\n        },\n        {\n          "time": "9:30 AM",\n          "activity": "Enjoy a last cup of coffee in New York City.",\n          "location": "Your choice"\n        },\n        {\n          "time": "10:00 AM",\n          "activity": "Head to JFK Airport for your flight home.",\n          "location": "JFK Airport, New York, NY"\n        }\n      ]\n    }\n  ]\n}\n```\n\n**Notes:**\n\n* This plan is a suggestion and can be customized to your interests and preferences.\n* Budget-friendly options like free museums, walking tours, and public transportation are emphasized.\n* Flight and hotel prices are estimates and can vary depending on the time of year and availability.\n* You can find cheap flights and hotels by searching online aggregators like Kayak, Skyscanner, and Expedia.\n* To get the most out of your trip, consider using a CityPASS for discounted access to popular attractions.\n* Be sure to check the websites of the attractions you want to visit for their hours of operation and any ticket requirements.\n\n**Have a great trip!** \n',
+          },
+        ],
+      },
+    ],
+  });
+  
+  // const result = await chatSession.sendMessage("INSERT_INPUT_HERE");
+  //console.log(result.response.text());
+  
+
+  
